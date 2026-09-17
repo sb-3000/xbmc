@@ -13,6 +13,7 @@
 #include "cores/RetroPlayer/RetroPlayer.h"
 #include "cores/VideoPlayer/VideoPlayer.h"
 #include "cores/paplayer/PAPlayer.h"
+#include "music/beefweb/BeefwebPlayer.h"
 #ifdef HAS_UPNP
 #include "network/upnp/UPnPPlayer.h"
 #endif
@@ -59,6 +60,10 @@ std::shared_ptr<IPlayer> CPlayerCoreConfig::CreatePlayer(IPlayerCallback& callba
   else if (m_type.compare("external") == 0)
   {
     player = std::make_shared<CExternalPlayer>(callback);
+  }
+  else if (m_type.compare("beefweb") == 0)
+  {
+    player = std::make_shared<KODI::MUSIC::BEEFWEB::CBeefwebPlayer>(callback);
   }
 
 #if defined(HAS_UPNP)

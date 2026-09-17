@@ -16,7 +16,9 @@
 #include "addons/ImageDecoder.h"
 #include "addons/addoninfo/AddonInfo.h"
 #include "addons/addoninfo/AddonType.h"
+#include "music/beefweb/BeefwebPlayer.h"
 #include "settings/AdvancedSettings.h"
+#include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
 #include "utils/URIUtils.h"
 
@@ -56,6 +58,21 @@ std::string CFileExtensionProvider::GetMusicExtensions() const
   std::string extensions(m_advancedSettings->m_musicExtensions);
   extensions += '|' + GetAddonExtensions(AddonType::VFS);
   extensions += '|' + GetAddonExtensions(AddonType::AUDIODECODER);
+
+  // An external music player reaches formats Kodi has no decoder for, and
+  // names the tracks it offers with an extension of its own so that they are
+  // not mistaken for something Kodi cannot play or, in the case of disc
+  // images, for something to browse into. Nothing on disk carries it.
+  const auto settingsComponent = CServiceBroker::GetSettingsComponent();
+  const auto settings = settingsComponent ? settingsComponent->GetSettings() : nullptr;
+  if (settings && settings->GetInt(CSettings::SETTING_MUSICPLAYER_EXTERNALPLAYER) ==
+                      KODI::MUSIC::BEEFWEB::EXTERNAL_MUSIC_PLAYER_BEEFWEB)
+  {
+    extensions += '|';
+    extensions += KODI::MUSIC::BEEFWEB::BEEFWEB_SUFFIX_SACD;
+    extensions += '|';
+    extensions += KODI::MUSIC::BEEFWEB::BEEFWEB_SUFFIX_AUDIO;
+  }
 
   return extensions;
 }

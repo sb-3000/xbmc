@@ -15,6 +15,8 @@
 #include "filesystem/VideoDatabaseDirectory.h"
 #include "guilib/LocalizeStrings.h"
 #include "guilib/WindowIDs.h"
+#include "music/beefweb/BeefwebDirectory.h"
+#include "music/beefweb/BeefwebPlayer.h"
 #include "playlists/PlayListTypes.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/MediaSourceSettings.h"
@@ -588,6 +590,21 @@ VECSOURCES& CGUIViewStateWindowMusicNav::GetSources()
     share.strName = item->GetLabel();
     share.strPath = item->GetPath();
     share.m_strThumbnailImage = item->GetArt("icon");
+    share.m_iDriveType = CMediaSource::SOURCE_TYPE_LOCAL;
+    m_sources.push_back(share);
+  }
+
+  // The media library of the external music player, when one is in use. It
+  // sits alongside the built-in nodes rather than among them, being served by
+  // the remote player rather than from Kodi's own library.
+  if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+          CSettings::SETTING_MUSICPLAYER_EXTERNALPLAYER) ==
+      KODI::MUSIC::BEEFWEB::EXTERNAL_MUSIC_PLAYER_BEEFWEB)
+  {
+    CMediaSource share;
+    share.strName = g_localizeStrings.Get(39210); // "Foobar library"
+    share.strPath = KODI::MUSIC::BEEFWEB::CBeefwebDirectory::RootPath();
+    share.m_strThumbnailImage = "DefaultMusicSongs.png";
     share.m_iDriveType = CMediaSource::SOURCE_TYPE_LOCAL;
     m_sources.push_back(share);
   }

@@ -16,6 +16,7 @@
 #include "cores/VideoPlayer/Interface/InputStreamConstants.h"
 #include "dialogs/GUIDialogContextMenu.h"
 #include "guilib/LocalizeStrings.h"
+#include "music/beefweb/BeefwebPlayer.h"
 #include "profiles/ProfileManager.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
@@ -131,6 +132,19 @@ void CPlayerCoreFactory::GetPlayers(const CFileItem& item, std::vector<std::stri
     rule->GetPlayers(item, validPlayers, players);
 
   CLog::Log(LOGDEBUG, "CPlayerCoreFactory::GetPlayers: matched {0} rules with players", players.size());
+
+  // An external music player takes precedence over the selection rules and the
+  // configured audio default: choosing one means asking for audio to leave Kodi
+  // altogether. The built-in players are still appended below, so they remain
+  // available to pick from the "play using" dialog.
+  if (item.IsAudio() &&
+      CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+          CSettings::SETTING_MUSICPLAYER_EXTERNALPLAYER) ==
+          KODI::MUSIC::BEEFWEB::EXTERNAL_MUSIC_PLAYER_BEEFWEB)
+  {
+    players.insert(players.begin(), "Beefweb");
+    CLog::Log(LOGDEBUG, "CPlayerCoreFactory::GetPlayers: preferring external music player");
+  }
 
   // Process defaults
 
@@ -368,6 +382,10 @@ bool CPlayerCoreFactory::LoadConfiguration(const std::string &file, bool clear)
     auto paplayer = std::make_unique<CPlayerCoreConfig>("PAPlayer", "music", nullptr);
     paplayer->m_bPlaysAudio = true;
     m_vecPlayerConfigs.emplace_back(std::move(paplayer));
+
+    auto beefwebPlayer = std::make_unique<CPlayerCoreConfig>("Beefweb", "beefweb", nullptr);
+    beefwebPlayer->m_bPlaysAudio = true;
+    m_vecPlayerConfigs.emplace_back(std::move(beefwebPlayer));
 
     auto retroPlayer = std::make_unique<CPlayerCoreConfig>("RetroPlayer", "game", nullptr);
     m_vecPlayerConfigs.emplace_back(std::move(retroPlayer));

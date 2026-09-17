@@ -15,6 +15,7 @@
 #include "FileDirectoryFactory.h"
 #include "PlaylistDirectory.h"
 #include "MusicDatabaseDirectory.h"
+#include "music/beefweb/BeefwebDirectory.h"
 #include "MusicSearchDirectory.h"
 #include "VideoDatabaseDirectory.h"
 #include "FavouritesDirectory.h"
@@ -171,6 +172,8 @@ IDirectory* CDirectoryFactory::Create(const CURL& url)
   if (url.IsProtocol("playlistmusic")) return new CPlaylistDirectory();
   if (url.IsProtocol("playlistvideo")) return new CPlaylistDirectory();
   if (url.IsProtocol("musicdb")) return new CMusicDatabaseDirectory();
+  if (url.IsProtocol("beefweb"))
+    return new KODI::MUSIC::BEEFWEB::CBeefwebDirectory();
   if (url.IsProtocol("musicsearch")) return new CMusicSearchDirectory();
   if (url.IsProtocol("videodb")) return new CVideoDatabaseDirectory();
   if (url.IsProtocol("library")) return new CLibraryDirectory();

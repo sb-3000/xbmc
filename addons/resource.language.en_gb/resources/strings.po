@@ -23841,6 +23841,84 @@ msgctxt "#39201"
 msgid "HDR10+"
 msgstr ""
 
+#. Label of setting "Music player" of category "musicplayer"
+#: system/settings/settings.xml
+msgctxt "#39202"
+msgid "Music player"
+msgstr ""
+
+#. Help text for setting with label #39202 "Music player"
+#: system/settings/settings.xml
+msgctxt "#39203"
+msgid "Select which player is used for music playback. An external player is controlled remotely over the network and plays the audio itself."
+msgstr ""
+
+#. Label of built-in option for setting "Music player" of label #39202
+#: system/settings/settings.xml
+msgctxt "#39204"
+msgid "Built-in player"
+msgstr ""
+
+#. Label of foobar2000 / Beefweb option for setting "Music player" of label #39202
+#: system/settings/settings.xml
+msgctxt "#39205"
+msgid "foobar2000 (Beefweb)"
+msgstr ""
+
+#. Label of setting "External player host" of category "musicplayer"
+#: system/settings/settings.xml
+msgctxt "#39206"
+msgid "External player host"
+msgstr ""
+
+#. Help text for setting with label #39206 "External player host"
+#: system/settings/settings.xml
+msgctxt "#39207"
+msgid "Host name or IP address of the computer running the external player. Use \"localhost\" if it runs on this device."
+msgstr ""
+
+#. Label of setting "External player port" of category "musicplayer"
+#: system/settings/settings.xml
+msgctxt "#39208"
+msgid "External player port"
+msgstr ""
+
+#. Help text for setting with label #39208 "External player port"
+#: system/settings/settings.xml
+msgctxt "#39209"
+msgid "Port that the external player's remote-control interface listens on. The Beefweb default is 8880."
+msgstr ""
+
+#. Label of the external player's media library in the music window
+#: xbmc/music/windows/GUIWindowMusicNav.cpp
+msgctxt "#39210"
+msgid "Foobar library"
+msgstr ""
+
+#. Label of setting "Preferred area" of category "musicplayer"
+#: system/settings/settings.xml
+msgctxt "#39211"
+msgid "Preferred area"
+msgstr ""
+
+#. Help text for setting with label #39211 "Preferred area"
+#: system/settings/settings.xml
+msgctxt "#39212"
+msgid "Show only tracks of the chosen area when browsing the external player's library. Discs that hold the same music in more than one area, such as SACDs carrying both a stereo and a multichannel mix, otherwise list every track twice."
+msgstr ""
+
+#. Label of stereo option for setting "Preferred area" of label #39211
+#: system/settings/settings.xml
+msgctxt "#39213"
+msgid "Stereo"
+msgstr ""
+
+#. Label of multichannel option for setting "Preferred area" of label #39211
+#: system/settings/settings.xml
+msgctxt "#39214"
+msgid "Multichannel"
+msgstr ""
+
 # 40000 to 40800 are reserved for Video Versions feature
 
 #. Generic video versions label (plural)

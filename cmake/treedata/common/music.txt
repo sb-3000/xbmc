@@ -1,4 +1,5 @@
 xbmc/music             music
+xbmc/music/beefweb     music/beefweb
 xbmc/music/dialogs     music/dialogs
 xbmc/music/infoscanner music/infoscanner
 xbmc/music/jobs        music/jobs
