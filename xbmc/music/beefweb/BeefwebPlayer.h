@@ -73,6 +73,14 @@ bool IsDirectStreamDigital(const std::string& codec);
 /*! \brief The medium a track came from, as far as it can be established. */
 std::string MediumSuffix(const std::string& remotePath, const std::string& codec);
 
+/*!
+ * \brief The path a track is known by within Kodi.
+ *
+ * Listings and playback reports have to agree on it, or Kodi cannot tell that
+ * the track it is told is playing is the one it listed.
+ */
+std::string IdentityPath(const BeefwebTrack& track);
+
 /*! \brief Values of the "musicplayer.externalplayer" setting. */
 enum ExternalMusicPlayer
 {

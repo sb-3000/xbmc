@@ -18,6 +18,7 @@
 #include "playlists/PlayList.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
+#include "utils/FileExtensionProvider.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/log.h"
@@ -74,6 +75,27 @@ std::string KODI::MUSIC::BEEFWEB::MediumSuffix(const std::string& remotePath,
     return BEEFWEB_SUFFIX_SACD;
 
   return BEEFWEB_SUFFIX_AUDIO;
+}
+
+std::string KODI::MUSIC::BEEFWEB::IdentityPath(const BeefwebTrack& track)
+{
+  // Two of Kodi's judgements about a file get in the way here, both made from
+  // its name alone. Listings are filtered against the extensions Kodi can play
+  // itself, which excludes anything only the remote player can decode. And a
+  // disc image is taken for something to browse into rather than something to
+  // play, which turns every track of one into a folder. Neither question is
+  // the right one when the playing happens elsewhere, so a track Kodi would
+  // misjudge is known to it by a name ending in an ordinary audio extension.
+  // The real name is restored before the remote player is given it.
+  const std::string& extensions =
+      CServiceBroker::GetFileExtensionProvider().GetMusicExtensions();
+
+  // A disc image may well carry an extension Kodi accepts as audio, so the
+  // name has to change for those whatever the extension says.
+  if (URIUtils::HasExtension(track.path, extensions) && !URIUtils::IsDiscImage(track.path))
+    return track.path;
+
+  return track.path + MediumSuffix(track.path, track.codec);
 }
 
 CBeefwebPlayer::CBeefwebPlayer(IPlayerCallback& callback)
@@ -361,7 +383,10 @@ void CBeefwebPlayer::ReportTrack(const BeefwebTrack& track)
   CLog::LogF(LOGDEBUG, "reporting position {} as '{}' by '{}'", track.index, track.title,
              track.artist);
 
-  CFileItem item(track.path, false);
+  // Named exactly as the listing named it, or Kodi finds no match for it there
+  const std::string path = IdentityPath(track);
+
+  CFileItem item(path, false);
   item.SetLabel(track.title.empty() ? track.path : track.title);
 
   MUSIC_INFO::CMusicInfoTag* tag = item.GetMusicInfoTag();
@@ -369,7 +394,7 @@ void CBeefwebPlayer::ReportTrack(const BeefwebTrack& track)
   tag->SetArtist(track.artist);
   tag->SetAlbum(track.album);
   tag->SetDuration(track.duration);
-  tag->SetURL(track.path);
+  tag->SetURL(path);
   tag->SetLoaded(true);
 
   if (track.subsong > 0)

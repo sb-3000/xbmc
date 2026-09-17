@@ -86,33 +86,6 @@ int TrackNumberOf(const BeefwebTrack& track)
 }
 
 /*!
- * \brief The path a track is known by within Kodi.
- *
- * Two of Kodi's judgements about a file get in the way here, both made from
- * its name alone. Listings are filtered against the extensions Kodi can play
- * itself, which excludes anything only the remote player can decode. And a
- * disc image is taken for something to browse into rather than something to
- * play, which turns every track of one into a folder.
- *
- * Neither question is the right one when the playing happens elsewhere, so a
- * track Kodi would misjudge is known to it by a name ending in an ordinary
- * audio extension. The real name is restored before the remote player is
- * given it.
- */
-std::string IdentityPath(const BeefwebTrack& track)
-{
-  const std::string& extensions =
-      CServiceBroker::GetFileExtensionProvider().GetMusicExtensions();
-
-  // A disc image may well carry an extension Kodi accepts as audio, so the
-  // name has to change for those whatever the extension says.
-  if (URIUtils::HasExtension(track.path, extensions) && !URIUtils::IsDiscImage(track.path))
-    return track.path;
-
-  return track.path + MediumSuffix(track.path, track.codec);
-}
-
-/*!
  * \brief Query restricting a listing to the area the user prefers.
  *
  * The remote player reports how many channels a track was mixed for, which is
